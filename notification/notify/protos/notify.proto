@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package notify;
+
+
+message NotificationRequest {
+  string from = 1;
+  string to = 2;
+}
+
+message NotificationResponse {
+  bool is_done = 1;
+}
+
+
+message NotificationCreatePostRequest {
+  string from = 1;
+  string to = 2;
+}
+
+
+
+service NotificationService {
+
+  rpc NotifyFollow(NotificationRequest) returns (NotificationResponse) {};
+  rpc NotifyCreate(stream NotificationRequest) returns (NotificationResponse) {};
+
+}

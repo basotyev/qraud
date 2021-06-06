@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+    mongodb:
+        container_name: mongodb
+        restart: always
+        volumes:
+            - ${WEBAPP_STORAGE_HOME}/site:/data/db
+        ports:
+            - "27017:27017"
+    postgresdb:
+        container_name: postgresdb
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "0000"
+            POSTGRES_DB: "microservices"
+        restart: always
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+    auth.api:
+        container_name: authapi
+        depends_on:
+            - postgresdb
+        volumes:
+            - .:/go/src/go-with-compose
+        ports:
+            - "8000:80"
+    blog.api:
+        container_name:  blogapi
+        depends_on:
+            - postgresdb
+            - notification.api
+        volumes:
+            - .:/go/src/go-with-compose
+        ports:
+            - "8001:80"
+    follow.api:
+        container_name: followapi
+        restart: on-failure
+        depends_on:
+            - mongodb
+        volumes:
+            - .:/go/src/go-with-compose
+        ports:
+            - "8002:80"
+    notification.api:
+        container_name: notificationapi
+        volumes:
+            - .:/go/src/go-with-compose
+        ports:
+            - "8003:80"
+
+volumes:
+  pgdata:
+

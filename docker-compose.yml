@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+    mongodb:
+        image: mongo
+    postgresdb:
+        image: postgres
+    auth.api:
+        image: ${DOCKER_REGISTRY-}authapi
+        build: ./auth2/
+    blog.api:
+        image: ${DOCKER_REGISTRY-}blogapi
+        build: ./blog_micro/
+    follow.api:
+        image: ${DOCKER_REGISTRY-}followapi
+        build: ./follow_micro/
+    notification.api:
+        image: ${DOCKER_REGISTRY-}notificationapi
+        build: ./notification/
+    
+    
